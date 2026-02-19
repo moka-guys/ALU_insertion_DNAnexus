@@ -1,0 +1,155 @@
+{
+  "name": "alu_insertion_analysis",
+  "title": "ALU Insertion Analysis",
+  "summary": "Runs Scramble MEI detection and ALU insertion analysis on a BAM file",
+  "version": "1.0.0",
+  "inputSpec": [
+    {
+      "name": "bam",
+      "label": "BAM file",
+      "class": "file",
+      "optional": false,
+      "patterns": ["*.bam"],
+      "help": "Input BAM file"
+    },
+    {
+      "name": "bai",
+      "label": "BAI index file",
+      "class": "file",
+      "optional": false,
+      "patterns": ["*.bai"],
+      "help": "Input BAI index file"
+    },
+    {
+      "name": "reference_tar",
+      "label": "Reference genome files (.tar.gz)",
+      "class": "file",
+      "optional": false,
+      "patterns": ["*.tar.gz"],
+      "help": "Tar.gz containing reference genome files (hs37d5.fa, .fai, .nhr, .nin, .nsq)"
+    },
+    {
+      "name": "bed",
+      "label": "BED file (optional)",
+      "class": "file",
+      "optional": true,
+      "patterns": ["*.bed"],
+      "help": "Optional BED file to restrict analysis to specific regions"
+    },
+    {
+      "name": "window",
+      "label": "Coverage window size (bp)",
+      "class": "int",
+      "optional": true,
+      "default": 50,
+      "help": "Coverage analysis window size in bp"
+    },
+    {
+      "name": "polyA_window",
+      "label": "PolyA window size (bp)",
+      "class": "int",
+      "optional": true,
+      "default": 10,
+      "help": "PolyA detection window size in bp"
+    },
+    {
+      "name": "threshold",
+      "label": "Coverage change threshold (%)",
+      "class": "float",
+      "optional": true,
+      "default": 10.0,
+      "help": "Coverage change threshold as a percentage"
+    },
+    {
+      "name": "min_polyA_len",
+      "label": "Minimum polyA length",
+      "class": "int",
+      "optional": true,
+      "default": 10,
+      "help": "Minimum polyA/T stretch length"
+    },
+    {
+      "name": "merge_gap",
+      "label": "Merge gap (bp)",
+      "class": "int",
+      "optional": true,
+      "default": 1,
+      "help": "Maximum gap for merging nearby variants"
+    },
+    {
+      "name": "proximity",
+      "label": "Proximity (bp)",
+      "class": "int",
+      "optional": true,
+      "default": 10,
+      "help": "Max distance from variant to keep coverage tract"
+    },
+    {
+      "name": "verbose",
+      "label": "Verbose logging",
+      "class": "boolean",
+      "optional": true,
+      "default": false,
+      "help": "Enable verbose logging"
+    }
+  ],
+  "outputSpec": [
+    {
+      "name": "clusters_txt",
+      "label": "Clusters file",
+      "class": "file",
+      "patterns": ["*.clusters.txt"],
+      "help": "Scramble cluster_identifier output"
+    },
+    {
+      "name": "vcf_gz",
+      "label": "Compressed VCF",
+      "class": "file",
+      "patterns": ["*.vcf.gz"],
+      "help": "Scramble VCF output (bgzipped)"
+    },
+    {
+      "name": "alu_vcf",
+      "label": "ALU insertions VCF",
+      "class": "file",
+      "patterns": ["*_ALU_ins.vcf"],
+      "help": "VCF filtered to ALU insertions only"
+    },
+    {
+      "name": "alu_analysis_csv",
+      "label": "ALU analysis CSV",
+      "class": "file",
+      "patterns": ["*_ALU_analysis.csv"],
+      "help": "Full ALU analysis results"
+    },
+    {
+      "name": "alu_analysis_high_confidence_csv",
+      "label": "High confidence ALU analysis CSV",
+      "class": "file",
+      "patterns": ["*_ALU_analysis_high_confidence.csv"],
+      "help": "High confidence ALU analysis results (BOTH evidence)"
+    }
+  ],
+  "runSpec": {
+    "interpreter": "bash",
+    "file": "src/ALU_analysis_dnanexus.sh",
+    "distribution": "Ubuntu",
+    "release": "22.04",
+    "version": "0",
+    "execDepends": [
+      {"name": "docker.io"}
+    ]
+  },
+  "access": {
+    "network": ["*"]
+  },
+  "regionalOptions": {
+    "aws:eu-central-1": {
+      "systemRequirements": {
+        "*": {
+          "instanceType": "mem1_ssd1_v2_x8"
+        }
+      }
+    }
+  }
+}
