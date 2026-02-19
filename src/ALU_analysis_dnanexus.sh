@@ -5,8 +5,14 @@ set -e -x -o pipefail
 # Download all inputs specified in dxapp.json
 dx-download-all-inputs --parallel
 
-# Make output directories
-mkdir -p ~/out/all_outputs
+# Make scratch directory for docker output and named output folders for DNAnexus
+mkdir -p /home/dnanexus/scratch
+mkdir -p /home/dnanexus/reference
+mkdir -p ~/out/clusters_txt
+mkdir -p ~/out/vcf_gz
+mkdir -p ~/out/alu_vcf
+mkdir -p ~/out/alu_analysis_csv
+mkdir -p ~/out/alu_analysis_high_confidence_csv
 
 # Download Docker image using hardcoded file ID
 scramble_docker_file_id=project-J1g3b9Q0BfbvfX94Y8xzx0zg:file-J6FYk9Q0BfbyzYfPyPYgX002
@@ -23,13 +29,8 @@ echo "Docker image name: ${scramble_docker_image_name}"
 docker load < /home/dnanexus/"${scramble_docker_image_file}"
 
 # Extract sample ID from BAM filename
-filename=${bam_name}
-sample_id=$(echo ${filename} | grep -oP 'NGS[^_]+_\d+')
+sample_id=$(basename ${bam_name} | grep -oP 'NGS[^_]+_\d+')
 echo "Sample ID: ${sample_id}"
-
-# Set up directories
-mkdir -p /home/dnanexus/reference
-mkdir -p /home/dnanexus/out/all_outputs
 
 # Unpack reference genome tar.gz
 tar -xzf ${reference_tar_path} -C /home/dnanexus/reference/
@@ -38,7 +39,7 @@ tar -xzf ${reference_tar_path} -C /home/dnanexus/reference/
 ref_fa=$(find /home/dnanexus/reference -name "*.fa" -o -name "*.fasta" | head -n 1)
 echo "Reference FASTA: ${ref_fa}"
 
-# Rename BAM/BAI to sample ID for use inside container
+# Copy BAM/BAI to sample ID filename for use inside container
 cp ${bam_path} /home/dnanexus/${sample_id}.bam
 cp ${bai_path} /home/dnanexus/${sample_id}.bai
 
@@ -64,7 +65,7 @@ docker run --rm \
     -v ${ref_fa}.nhr:/app/data/reference.fa.nhr \
     -v ${ref_fa}.nin:/app/data/reference.fa.nin \
     -v ${ref_fa}.nsq:/app/data/reference.fa.nsq \
-    -v /home/dnanexus/out/all_outputs:/app/output \
+    -v /home/dnanexus/scratch:/app/output \
     ${bed_mount} \
     ${scramble_docker_image_name} \
     --bam /app/data/${sample_id}.bam \
@@ -77,6 +78,13 @@ docker run --rm \
     --proximity ${proximity} \
     ${bed_arg} \
     ${verbose_arg}
+
+# Copy outputs to named DNAnexus output folders
+cp /home/dnanexus/scratch/${sample_id}.clusters.txt           ~/out/clusters_txt/
+cp /home/dnanexus/scratch/${sample_id}.vcf.gz                 ~/out/vcf_gz/
+cp /home/dnanexus/scratch/${sample_id}_ALU_ins.vcf            ~/out/alu_vcf/
+cp /home/dnanexus/scratch/${sample_id}_ALU_analysis.csv       ~/out/alu_analysis_csv/
+cp /home/dnanexus/scratch/${sample_id}_ALU_analysis_high_confidence.csv ~/out/alu_analysis_high_confidence_csv/
 
 # Upload all outputs
 dx-upload-all-outputs --parallel
