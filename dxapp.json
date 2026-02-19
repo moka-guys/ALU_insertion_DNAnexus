@@ -131,25 +131,15 @@
     }
   ],
   "runSpec": {
+    "systemRequirements": {
+      "main": {
+        "instanceType": "mem1_ssd1_v2_x16"
+      }
+    },
     "interpreter": "bash",
     "file": "src/ALU_analysis_dnanexus.sh",
     "distribution": "Ubuntu",
-    "release": "22.04",
-    "version": "0",
-    "execDepends": [
-      {"name": "docker.io"}
-    ]
-  },
-  "access": {
-    "network": ["*"]
-  },
-  "regionalOptions": {
-    "aws:eu-central-1": {
-      "systemRequirements": {
-        "*": {
-          "instanceType": "mem1_ssd1_v2_x8"
+    "release": "20.04",
+    "version": "0"
         }
       }
-    }
-  }
-}
