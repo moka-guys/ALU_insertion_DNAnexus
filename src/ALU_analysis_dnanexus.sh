@@ -9,7 +9,7 @@ dx-download-all-inputs --parallel
 mkdir -p ~/out/all_outputs
 
 # Download Docker image using hardcoded file ID
-scramble_docker_file_id=project-XXXXXXXXXX:file-XXXXXXXXXX
+scramble_docker_file_id=project-J1g3b9Q0BfbvfX94Y8xzx0zg:file-J6FYk9Q0BfbyzYfPyPYgX002
 dx download ${scramble_docker_file_id}
 
 # Get the filename and extract the image name from the tar manifest
