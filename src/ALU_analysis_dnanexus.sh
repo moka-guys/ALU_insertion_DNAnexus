@@ -82,7 +82,14 @@ docker run --rm \
 # Copy outputs to named DNAnexus output folders
 cp /home/dnanexus/scratch/${sample_id}.clusters.txt           ~/out/clusters_txt/
 cp /home/dnanexus/scratch/${sample_id}.vcf.gz                 ~/out/vcf_gz/
-cp /home/dnanexus/scratch/${sample_id}_ALU_ins.vcf            ~/out/alu_vcf/
+
+# ALU VCF name depends on whether a BED file was provided
+if [ -n "${bed_path}" ]; then
+    cp /home/dnanexus/scratch/${sample_id}_specified_region_ALU_ins.vcf ~/out/alu_vcf/
+else
+    cp /home/dnanexus/scratch/${sample_id}_ALU_ins.vcf ~/out/alu_vcf/
+fi
+
 cp /home/dnanexus/scratch/${sample_id}_ALU_analysis.csv       ~/out/alu_analysis_csv/
 cp /home/dnanexus/scratch/${sample_id}_ALU_analysis_high_confidence.csv ~/out/alu_analysis_high_confidence_csv/
 
