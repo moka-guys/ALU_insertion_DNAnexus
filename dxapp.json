@@ -1,8 +1,8 @@
 {
-  "name": "alu_insertion_analysis",
-  "title": "ALU Insertion Analysis",
+  "name": "alu_insertion_analysis_v1.1.0",
+  "title": "ALU Insertion Analysis v1.1.0",
   "summary": "Runs Scramble MEI detection and ALU insertion analysis on a BAM file",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "inputSpec": [
     {
       "name": "bam",
@@ -128,6 +128,13 @@
       "class": "file",
       "patterns": ["*_ALU_analysis_high_confidence.csv"],
       "help": "High confidence ALU analysis results (BOTH evidence)"
+    },
+    {
+      "name": "alu_analysis_summary_txt",
+      "label": "ALU Analysis Summary",
+      "class": "file",
+      "patterns": ["*_ALU_analysis_summary.txt"],
+      "optional": false
     }
   ],
   "runSpec": {

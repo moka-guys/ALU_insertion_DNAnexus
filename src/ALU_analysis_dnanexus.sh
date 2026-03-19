@@ -13,9 +13,10 @@ mkdir -p ~/out/vcf_gz
 mkdir -p ~/out/alu_vcf
 mkdir -p ~/out/alu_analysis_csv
 mkdir -p ~/out/alu_analysis_high_confidence_csv
+mkdir -p ~/out/alu_analysis_summary_txt
 
 # Download Docker image using hardcoded file ID
-scramble_docker_file_id=project-J1g3b9Q0BfbvfX94Y8xzx0zg:file-J6FYk9Q0BfbyzYfPyPYgX002
+scramble_docker_file_id=project-J1g3b9Q0BfbvfX94Y8xzx0zg:file-J6xyGqQ0BfbXP8XpBZ30q0VF
 dx download ${scramble_docker_file_id}
 
 # Get the filename and extract the image name from the tar manifest
@@ -82,6 +83,7 @@ docker run --rm \
 # Copy outputs to named DNAnexus output folders
 cp /home/dnanexus/scratch/${sample_id}.clusters.txt           ~/out/clusters_txt/
 cp /home/dnanexus/scratch/${sample_id}.vcf.gz                 ~/out/vcf_gz/
+cp /home/dnanexus/scratch/${sample_id}_ALU_analysis_summary.txt ~/out/alu_analysis_summary_txt/
 
 # ALU VCF name depends on whether a BED file was provided
 if [ -n "${bed_path}" ]; then
