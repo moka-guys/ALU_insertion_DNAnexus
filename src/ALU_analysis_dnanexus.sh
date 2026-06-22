@@ -15,7 +15,8 @@ mkdir -p ~/out/alu_analysis_high_confidence_csv
 mkdir -p ~/out/sequence_search_out
 
 # Download Docker image using hardcoded file ID
-alu_docker_file_id=project-J1g3b9Q0BfbvfX94Y8xzx0zg:file-J8pb9v00BfbqYXFvbfZjB9G4
+#alu_docker_file_id=project-J1g3b9Q0BfbvfX94Y8xzx0zg:file-J8pb9v00BfbqYXFvbfZjB9G4
+alu_docker_file_id=project-J1g3b9Q0BfbvfX94Y8xzx0zg:file-J8vZX0Q0BfbXxbz76q9JBy6x # parallel testing
 dx download ${alu_docker_file_id}
 
 # Get the filename and extract the image name from the tar manifest

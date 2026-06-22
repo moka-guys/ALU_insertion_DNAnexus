@@ -1,8 +1,8 @@
 {
-  "name": "alu_insertion_analysis_v2.0.0",
-  "title": "ALU Insertion Analysis v2.0.0",
+  "name": "alu_insertion_analysis_v2.1.0",
+  "title": "ALU Insertion Analysis v2.1.0",
   "summary": "Runs Scramble MEI detection and ALU insertion analysis on a BAM file",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "inputSpec": [
     {
       "name": "reference_tar",
@@ -154,6 +154,6 @@
         "*"
       ],
       "project": "VIEW",
-      "allProjects": "VIEW",
+      "allProjects": "VIEW"
     }
       }
