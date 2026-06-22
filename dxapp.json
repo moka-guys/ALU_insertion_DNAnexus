@@ -152,6 +152,8 @@
     "access": {
       "network": [
         "*"
-      ]
+      ],
+      "project": "VIEW",
+      "allProjects": "VIEW",
     }
       }
