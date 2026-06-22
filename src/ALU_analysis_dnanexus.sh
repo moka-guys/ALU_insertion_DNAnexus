@@ -71,9 +71,9 @@ docker run --rm \
 # Copy outputs to named DNAnexus output folders
 cp /home/dnanexus/output/*.clusters.txt           ~/out/clusters_txt/
 cp /home/dnanexus/output/*.vcf.gz                 ~/out/vcf_gz/
-if [ -f /home/dnanexus/output/*_bam_output_*.txt ]; then
-    cp /home/dnanexus/output/*_bam_output_*.txt ~/out/sequence_search_out
-fi
+for f in /home/dnanexus/output/*_output_*.txt; do
+    [ -f "$f" ] && cp "$f" ~/out/sequence_search_out/
+done
 
 # ALU VCF name depends on whether a BED file was provided
 if [ -n "${bed_path}" ]; then
