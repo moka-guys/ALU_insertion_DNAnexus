@@ -1,25 +1,9 @@
 {
-  "name": "alu_insertion_analysis_v1.1.0",
-  "title": "ALU Insertion Analysis v1.1.0",
+  "name": "alu_insertion_analysis_v2.0.0",
+  "title": "ALU Insertion Analysis v2.0.0",
   "summary": "Runs Scramble MEI detection and ALU insertion analysis on a BAM file",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "inputSpec": [
-    {
-      "name": "bam",
-      "label": "BAM file",
-      "class": "file",
-      "optional": false,
-      "patterns": ["*.bam"],
-      "help": "Input BAM file"
-    },
-    {
-      "name": "bai",
-      "label": "BAI index file",
-      "class": "file",
-      "optional": false,
-      "patterns": ["*.bai"],
-      "help": "Input BAI index file"
-    },
     {
       "name": "reference_tar",
       "label": "Reference genome files (.tar.gz)",
@@ -57,7 +41,7 @@
       "label": "Coverage change threshold (%)",
       "class": "float",
       "optional": true,
-      "default": 10.0,
+      "default": 15.0,
       "help": "Coverage change threshold as a percentage"
     },
     {
@@ -91,56 +75,72 @@
       "optional": true,
       "default": false,
       "help": "Enable verbose logging"
+    },
+    {
+      "name": "dx_project_id",
+      "label": "DNAnexus project ID to scan",
+      "class": "string",
+      "optional": false,
+      "help": "Project ID containing R134 BAM files to scan (scan results are logged, not yet used for processing)"
     }
   ],
   "outputSpec": [
     {
       "name": "clusters_txt",
       "label": "Clusters file",
-      "class": "file",
+      "class": "array:file",
       "patterns": ["*.clusters.txt"],
       "help": "Scramble cluster_identifier output"
     },
     {
       "name": "vcf_gz",
       "label": "Compressed VCF",
-      "class": "file",
+      "class": "array:file",
       "patterns": ["*.vcf.gz"],
       "help": "Scramble VCF output (bgzipped)"
     },
     {
       "name": "alu_vcf",
       "label": "ALU insertions VCF",
-      "class": "file",
+      "class": "array:file",
       "patterns": ["*_ALU_ins.vcf"],
       "help": "VCF filtered to ALU insertions only"
     },
     {
       "name": "alu_analysis_csv",
       "label": "ALU analysis CSV",
-      "class": "file",
+      "class": "array:file",
       "patterns": ["*_ALU_analysis.csv"],
-      "help": "Full ALU analysis results"
+      "help": "Full ALU analysis results",
+      "optional": true
     },
     {
       "name": "alu_analysis_high_confidence_csv",
       "label": "High confidence ALU analysis CSV",
-      "class": "file",
+      "class": "array:file",
       "patterns": ["*_ALU_analysis_high_confidence.csv"],
-      "help": "High confidence ALU analysis results (BOTH evidence)"
+      "help": "High confidence ALU analysis results (BOTH evidence)",
+      "optional": true
     },
     {
       "name": "alu_analysis_summary_txt",
       "label": "ALU Analysis Summary",
-      "class": "file",
+      "class": "array:file",
       "patterns": ["*_ALU_analysis_summary.txt"],
-      "optional": false
+      "optional": true
+    },
+    {
+      "name": "sequence_search_out",
+      "label": "sequence_search_outputs",
+      "class": "array:file",
+      "patterns": ["*.txt"],
+      "optional": true
     }
   ],
   "runSpec": {
     "systemRequirements": {
       "main": {
-        "instanceType": "mem1_ssd1_v2_x16"
+        "instanceType": "mem1_ssd1_v2_x4"
       }
     },
     "interpreter": "bash",
@@ -148,5 +148,10 @@
     "distribution": "Ubuntu",
     "release": "20.04",
     "version": "0"
-        }
+        },
+    "access": {
+      "network": [
+        "*"
+      ]
+    }
       }
