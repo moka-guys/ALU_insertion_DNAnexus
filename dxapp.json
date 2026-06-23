@@ -18,6 +18,7 @@
       "class": "file",
       "optional": true,
       "patterns": ["*.bed"],
+      "default": "project-J32193pK9yGfjP2GyZ94KZf4:file-J67gV9pK9yGqfZ8VFv8Fgq3g",
       "help": "Optional BED file to restrict analysis to specific regions"
     },
     {
