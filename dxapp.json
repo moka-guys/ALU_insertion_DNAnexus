@@ -1,7 +1,7 @@
 {
   "name": "alu_insertion_analysis_v2.1.0",
   "title": "ALU Insertion Analysis v2.1.0",
-  "summary": "Runs Scramble MEI detection and ALU insertion analysis on a BAM file",
+  "summary": "Runs ALU insertion analysis on a run folder",
   "version": "2.1.0",
   "inputSpec": [
     {
@@ -10,7 +10,13 @@
       "class": "file",
       "optional": false,
       "patterns": ["*.tar.gz"],
-      "help": "Tar.gz containing reference genome files (hs37d5.fa, .fai, .nhr, .nin, .nsq)"
+      "help": "Tar.gz containing reference genome files (hs37d5.fa, .fai, .nhr, .nin, .nsq)",
+      "default": {
+        "$dnanexus_link": {
+          "project": "project-J1g3b9Q0BfbvfX94Y8xzx0zg",
+          "id": "file-J6FZ3080Bfbk6fYXx7pyvQ61"
+        }
+      }
     },
     {
       "name": "bed",
@@ -18,7 +24,12 @@
       "class": "file",
       "optional": true,
       "patterns": ["*.bed"],
-      "default": "project-J32193pK9yGfjP2GyZ94KZf4:file-J67gV9pK9yGqfZ8VFv8Fgq3g",
+      "default": {
+        "$dnanexus_link": {
+          "project": "project-ByfFPz00jy1fk6PjpZ95F27J",
+          "id": "file-G1zzb780jy1zPQgJGYJjKB4Z"
+        }
+      },
       "help": "Optional BED file to restrict analysis to specific regions"
     },
     {
@@ -91,21 +102,24 @@
       "label": "Clusters file",
       "class": "array:file",
       "patterns": ["*.clusters.txt"],
-      "help": "Scramble cluster_identifier output"
+      "help": "Scramble cluster_identifier output",
+      "optional": true
     },
     {
       "name": "vcf_gz",
       "label": "Compressed VCF",
       "class": "array:file",
       "patterns": ["*.vcf.gz"],
-      "help": "Scramble VCF output (bgzipped)"
+      "help": "Scramble VCF output (bgzipped)",
+      "optional": true
     },
     {
       "name": "alu_vcf",
       "label": "ALU insertions VCF",
       "class": "array:file",
       "patterns": ["*_ALU_ins.vcf"],
-      "help": "VCF filtered to ALU insertions only"
+      "help": "VCF filtered to ALU insertions only",
+      "optional": true
     },
     {
       "name": "alu_analysis_csv",
@@ -136,12 +150,18 @@
       "class": "array:file",
       "patterns": ["*.txt"],
       "optional": true
-    }
+    },
+    {
+    "name": "failed_samples_scramble",
+    "label": "samples that failed scramble analysis",
+    "class": "file",
+    "patterns": ["*.txt"],
+    "optional": true}
   ],
   "runSpec": {
     "systemRequirements": {
       "main": {
-        "instanceType": "mem1_ssd1_v2_x4"
+        "instanceType": "mem1_ssd1_v2_x8"
       }
     },
     "interpreter": "bash",

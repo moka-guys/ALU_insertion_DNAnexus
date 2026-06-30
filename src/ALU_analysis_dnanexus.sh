@@ -13,10 +13,11 @@ mkdir -p ~/out/vcf_gz
 mkdir -p ~/out/alu_vcf
 mkdir -p ~/out/alu_analysis_high_confidence_csv
 mkdir -p ~/out/sequence_search_out
+mkdir -p ~/out/failed_samples_scramble
 
 # Download Docker image using hardcoded file ID
-#alu_docker_file_id=project-J1g3b9Q0BfbvfX94Y8xzx0zg:file-J8pb9v00BfbqYXFvbfZjB9G4
-alu_docker_file_id=project-J1g3b9Q0BfbvfX94Y8xzx0zg:file-J8vZX0Q0BfbXxbz76q9JBy6x # parallel testing
+alu_docker_file_id=project-J1g3b9Q0BfbvfX94Y8xzx0zg:file-J91j4Y80BfbQXXXy6kXQFZgJ
+
 dx download ${alu_docker_file_id}
 
 # Get the filename and extract the image name from the tar manifest
@@ -70,21 +71,22 @@ docker run --rm \
   --dx_project_id "$dx_project_id"
 
 # Copy outputs to named DNAnexus output folders
-cp /home/dnanexus/output/*.clusters.txt           ~/out/clusters_txt/
-cp /home/dnanexus/output/*.vcf.gz                 ~/out/vcf_gz/
+#cp /home/dnanexus/output/*.clusters.txt           ~/out/clusters_txt/
+#cp /home/dnanexus/output/*.vcf.gz                 ~/out/vcf_gz/
 for f in /home/dnanexus/output/*_output_*.txt; do
     [ -f "$f" ] && cp "$f" ~/out/sequence_search_out/
 done
 
-# ALU VCF name depends on whether a BED file was provided
-if [ -n "${bed_path}" ]; then
-    cp /home/dnanexus/output/*_specified_region_ALU_ins.vcf ~/out/alu_vcf/
-else
-    cp /home/dnanexus/output/*_ALU_ins.vcf ~/out/alu_vcf/
-fi
+for f in /home/dnanexus/output/*_ALU_ins.vcf; do
+    [ -f "$f" ] && cp "$f" ~/out/alu_vcf/
+done
 
 for f in /home/dnanexus/output/*_ALU_analysis_high_confidence.csv; do
     [ -f "$f" ] && cp "$f" ~/out/alu_analysis_high_confidence_csv/
+done
+
+for f in /home/dnanexus/output/*scramble.txt; do
+     [ -f "$f" ] && cp "$f" ~/out/failed_samples_scramble/
 done
 
 # Upload all outputs
